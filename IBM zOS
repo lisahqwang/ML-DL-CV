@@ -1,0 +1,35 @@
+import org.apache.spark.ml.feature.{StringIndexer, IndexToString, VectorIndexer, VectorAssembler} 
+import org.apache.spark.ml.regression.LinearRegression 
+import org.apache.spark.ml.classification.LogisticRegression 
+import com.ibm.analytics.ngp.ingest.Sampling 
+import com.ibm.analytics.ngp.pipeline._
+import org.apache.spark.ml.PipelineStage 
+import com.ibm.analytics.ngp.util._
+
+//Read the DB2 data 
+val df = spark.read.format("jdbc").options(Map("driver" -> "com.ibm.db2.jcc.DB2Driver",
+                                                "url" -> "jdbc:db2://<url>:<port>/<location>", 
+                                                "user" -> "<userid>", 
+                                                "password" -> "<password>", 
+                                                "dbtable" -> "ABC.FINDATA")).load()
+
+//split
+val train = 80 
+val test = 10 
+val validate = 10 
+
+val splits = Sampling.trainingSplit(df, train, test, validate) 
+val trainDF = splits._1 
+val testDF = splits._2
+val validateDF = split._3 
+
+//train 
+trainDF.cache()
+
+//evaluate 
+import com.ibm.analytics.ngp.pipeline.evaluate._
+import com.ibm.analytics.ngp.pipeline.evaluate.JsonMetricsModel._ 
+import spray.json._
+val metrics = 
+Evaluator.evaluateModel(MLProblemType.BinaryClassifier , model, testDF) 
+println(s"Binary Metric: ${metrics,asInstanceOf[BinaryClassificationMetricsModel].toJson}")
