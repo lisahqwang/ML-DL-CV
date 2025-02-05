@@ -1,0 +1,190 @@
+word form = walking (variation + prefix + postfix), stem = walk (no prefixes) lemma: the dictionary form of a word
+9 part of speech: noun, verb, article, adjective, preposition, pronoun, adverb, conjunction, interjection
+
+=="prescriptive" refers to a perspective that dictates how language "should" be used, outlining specific rules and standards for "correct" grammar, while "descriptive" focuses on analyzing how language is actually used by speakers, without judgment on whether it is "correct" or not;== =="explanatory" aims to understand the reasons behind language patterns and structures, going beyond mere description to explore the underlying causes and motivations==
+
+Constituency tests 
+1. substitution tests** are a family of tests that can be used to determine both constituency and category label. The premise behind these tests is that if you can replace the string of words in questions with something whose category you _know_, then the string of words must share a category with the thing you’ve replaced it with. 
+2. sentence fragments test; the fragment test alone doesn’t tell you what the _category_ of the constituent is
+3. The third constituency test we can use is also a family of tests, called **movement tests** (or also **displacement tests**) The tired doctor slept → It was the tired doctor that slept
+4. **coordination** test The tired doctor slept → The tired doctor and Sarah slept.
+
+dependencies syntax postulates that syntactic structure consists of relations between lexical items, normally binary asymmetric relations called dependencies 
+
+The grammatical relations are exemplified in traditional grammar by the notions of subject, direct object, and indirect object
+
+Syntactic head is the noun that refers to the same entity as the whole phrase, NP's head is the noun. Verb Phrase's head is the verb 
+
+Dependency grammar is purely descriptive and not generative like CFGs, CFGS capture only nested dependencies. 
+
+Projective arc is an arc/arrows_with_tag are projective when there is a path that lie between head and dependent
+____________________________________________________________________
+P(A|B) =( P(B|A) * P(A) )/ P(B)
+
+Noisy channel model: P(X|Y ): Noise model. The distribution describing what user is likely to type, given what they meant to type. For HMM tagging, we extend the idea to assume that we start off with just the tags, and through the noisy channel, the tags gets "corrupted" into words. The task then is to remove the "noise" and restore the original tags. Remove noise is the objective
+
+The channel has a probabilistic interpretation, whereby you assume that the original pristine version has some probability (prior), and the addition of specific noise has some probability (conditional). These probs can be used to find the most likely original version given the actually observed signal.
+
+skip gram and BOW focus on the immediate surrounding words, content is static (single embedding for each word regardless of context), ELMo and transformers capture dynamic contextual embeddings, transformers and BERT use attention to model long-range dependencies, no fixed context windows. 
+
+skip gram produces output prob distribution vector given target word input. Skip gram predicts surrounding word given one word, CBOW predicts one word given surrounding words
+
+Vector Space Model 
+1. Document Term Matrix
+2. Term frequency inverse Document Frequency 
+3. Vectorization 
+4. Cosine Similarity The key idea behind cosine similarity is to calculate the cosine of the angle between two vectors. If the vectors are very similar, their angle will be small, and the cosine value will be close to 1. Conversely, if the vectors are dissimilar, the angle will be large, and the cosine value will approach 0.
+
+______________________________________________________________________
+HMM 
+Markov independence assumption: the current state is conditionally independent of all other past states given the state in the previous time step. A hidden Markov model is a probabilistic framework used to predict the results of an event based on a series of observations with one or several hidden internal states.
+
+adding [START] and [END] tokens _provides clear boundaries for input sequences_
+
+p(w|u) = count(u,w)/count(u)
+additive smoothing = P(w) = count + 1/ N+V and linear interpolation katz' backoff
+perplexity measures how well the ngram predicts the sample
+_________________________________________
+Terminals = with, saw, astronomers, 
+nonterminal = S, PP, NP, VP, 
+start = S
+
+CKY is the span grid filler question 
+_________________________________________
+Dependency parsing 
+Graph-based dependency parsing (* know the general idea: each word needs to get a head, start with completely connected graph, score each edge, keep the highest scoring edges)
+____________________________________________
+Machine Learning 
+softmax squashes score to range btw 0 and 1
+Maximum Entropy Markov Models (for POS tagging) probability only depends on the previous tag, but we can see the entire input sequence
+
+Backpropagation = propagating back partial derivatives of the loss with respect to each weight 
+The distributional hypothesis _suggests that the meaning of a word can be inferred from the context in which it appears_
+
+TF*IDF = frequency t appear in the context window * for how many words does t appear in the context window
+
+Need to dimension-reduce to a dense matrix as singular value decomposition. 
+
+syntagmatic relatedness (not substitutable) vs paradigmatic relatedness (substituable)
+
+Negative sampling is creating 2 training sets, one set D of "correct" word context pairs and set D bar of "incorrect" word context pairs, train a log-linear model to distinguish between good and bad pairs using a sigmoid activation function and the output. 
+
+Wordnet is a lexical database containing English word senses and their relations 
+
+Word Sense Disambiguition is to get the sense of the word, which candidate sense is the best. Lesk Algorithm says choose the sense that is the dictionary glosses, highest word overlap between gloss and context
+________________________________
+NN are used to compute prob distributions
+Use GPT to encode the sentence, in GPT you would use the extract token and BERT you would use the CLS token. You would use that representation and feed it to some downstream classifier
+
+Neural language model
+contextualized word embeddings
+
+1. what is something ELMo can do that Word2Vec cannot do: 
+
+conventional pre-trained embeddings do not take context into account and cannot model polysemy, RNN can encode context of arbitrary length 
+1. What is the paralelogram method for solving analogies - cognitive model of analogical reasoning, 
+2. Elmo on word sense disambiguation: 
+3. What is the benefit of LSTM - solves the vanishing gradient problem 
+4. Why do we need positional encoding - unlike the RNN, the model has no idea where the tokens appear int he input, they are all fed into the model at the same time. Unlike RNN, they don't appear in linear order
+5. Transformers have self-attention, each token in the encoder can attend to other tokens in the encoder, cross attention allows the decoder token to pay attention to any encoder representation. Decoder's right hand side token is masked because they have not been generated
+6. GLUE/SuperGLUe problems: GLUE tasks: sentiment analysis, text similarity, yes/no question answerng 
+7. RLHF: Human ranks the results that the models produces, and gives it a scoring using the reward model
+8. Instruction Tuning is finetuning the model on a separate dataset of instruction, response pairs from many different tasks. Give it a LLM training objective. Because LLM training objective (next word prediction) is not aligned with user's objective (follow specific instructions). 
+9. NLP tasks can be set up as classification problems - feed the output of the transformer into a linear layer.
+10. In case of BERT, the [CLS] token is specifically used for the aggregate meaning of the entire input sequence. For tasks like classification (e.g. sentiment analysis, news topic classification), the output of the [CLS] token is used as the representation of the whole sequence. So, a BERT Model is trained so that the [CLS] token captures the relevant information of the input sequence and pass the same through a linear layer to produce a prediction (e.g. a class label). 
+11. Skip gram is probability of word given context, CBOW is prob of context given word
+12. A valid training objective would be to maximize the log probability of the correct constituency label for each span s[i, j]. For this task we would use a tree bank with constituency labels, such as the Penn Treebank.
+  
+On the other hand, GPT models, being autoregressive, work differently from BERT. GPT doesn't have a specific token like [CLS]. For downstream tasks, you can use the final hidden state of the last token in the sequence to make predictions, especially when you're performing a task like text completion or some basic classification
+
+__________________________________________________________
+
+RNN  = hidden layer as state representation, state representation is fed back into the function R. 
+x-> R->O 
+input x to hidden representation, then from hidden representation to output vector y 
+
+BPTT = creates a series of interconnected feedforward networks
+
+acceptor = RNNs to predict and calculate loss, text classification, sentiment detection 
+transducer = POS, sequence tagging, language modeling
+
+Unsupervised pre-training is train a model on some unsupervised task (e.g.  
+language modeling) on large amounts of data, and then  
+transfer the model parameters to another task
+
+We are aggregating the hidden state over individual time step to build up a representation for the left context. RNNs we can use as an encoder where we consume the input text and get a representation for the input text, use that to make a prediction. 
+Or use as transducer, for each token producer a POS tag, BIO tags
+
+How do we train RNNs? 
+Backpropagation through time, unrolling the RNN to a fixed number of token positions and then training it as if it was a feed-forward neural network 
+
+Bidirectional RNNs mean that you're basically processing the same sequence from the left end to the right, and then concatenating the representations that you get useing the forward RNN and the backward RNN 
+
+ELMo = bidirectional and stacked RNN to produce contextualized representations
+
+How is the transformer different from RNN? It's because we don't have recurrency, we are not building up a hidden state incrementally. 
+
+ Transformer-based models are often pre-trained on a language modeling objective on a large corpus and then fine-tuned on a specific task. What would be the benefits of fine-tuning the model that generates the word representations [hroot, h1, h2, . . . , hm] on the dependency parsing task?
+_There are many possible benefits. The pre-trained representations may not contain enough information about the syntactic behavior of each word and the interaction between a head and dependent. Finetuning would force the model to learn such information._
+
+ATTENTION
+1. decoder only has masked self attention 
+- self attention: QKV are all computed from the output representations of the previous layer using linear transformations
+- for decoder: "mask" values of score(q,k) that correspond to connections to unseen outputs 
+- encoder/decoder attention: KV are computed from the output of the encoder, Q is computed from the output of the previous decoder layer 
+ELMo takes each input token k and then get representation s, compute a weighted sum of these representations 
+___________________________________________________________________
+Transformer
+inputs token into input embedding, after many layers encoded input representations. 
+
+Multihead attention allows for different linear transformations, ex. syntax, encoding semantics 
+
+GPT 
+stacked transformer decoder layer 
+Finetuning: 
+1. apply pre-trained model to input sequence 
+2. train a linear model that uses the last transformer layer 
+3. task-specific classification objective: maximum log(P(y|x...xm))
+
+
+BERT = BETTER FOR CLASSIFICATION stacked transformer encoder layer, representations can attend to the entire input sequence. The output of the last layer is a representation for each input token. encoder models / denoising autoencoders like BERT are a better fit for classification tasks because they see the entire input sequence. Note that BERT is also pre-trained on the next-sentence prediction task, which at least gives you a reasonable representation for the entire input sequence in the [CLS] token. In many cases, a classifier can just use this [CLS] representation without fine-tuning (and only train the parameters of the classifier itself on the classification task).
+
+You can pack two sentences together with the [SEP] symbol, [CLS] is the special classification token to compute a single representation of the input for classification task 
+
+Masked Language Model objective 
+compute cross-entropy loss on the output predictions of the [MASK]ed tokens
+
+Next Sentence Prediction Objective 
+the task is for input sentence A [SEP] B, should B follow A? create training corpus with 1/2 labeled sentence pairs isNext and 50% labeled notNext. Predicting what is the probability that the next sentence is the next sentence given the 1st sentence. 
+
+BERT finetuning 
+for sequence tasks: use output representations to make per-token predictions
+for classification tasks: use [CLS] representation to make a prediction
+- transducer-based approach to SRL (BIO sequence tagging, using, for example an RNN or transformer)
+
+Apply softmax on the [CLS] for next sentence prediction 
+
+______________________________________________________________
+PropBank 
+VerbNet has each verb and its classes, subsets of thematic roles
+
+Arg0 = protoagent and Arg1 = proto patient 
+ex. the company (Arg0) donated (rel) over $35000 (arg1) to residents (arg2)
+arg2 = benefactive, instrument, end state
+arg3 = start point, attribute
+arg4 = end point
+span graph base approach looks at pairs of argument spans and the predicate, and making an individual decision for the pair. 
+__________________________________________
+AMR
+meaning of vertices (entities / event instances) and edges (relations)
+reneetrancy are nodes with more than one parent
+DAG directed acyclic graph, single node 
+
+SRL can be split into four subtasks: predicate detection, predicate disambiguation, argument identification, and argument classification
+______________________________
+
+Yes, you are correct that intuitively encoder models / denoising autoencoders like BERT are a better fit for classification tasks because they see the entire input sequence. Note that BERT is also pre-trained on the next-sentence prediction task, which at least gives you a reasonable representation for the entire input sequence in the [CLS] token. In many cases, a classifier can just use this [CLS] representation without fine-tuning (and only train the parameters of the classifier itself on the classification task).
+
+When you use GPT for classification problems, the input is typically concatenated with a final [EXTRACT] token. But that [EXTRACT] token didn't appear during pretrainign, so GPT itself needs to be finetuned on such tasks.
+
+In practice, the available pre-trained decoder / autoregressive models are bigger than the encoder / denoising autoencoder models. Therefore using such models with a minimal amount of fine-tuning can work better.
